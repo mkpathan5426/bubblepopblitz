@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --main-color: rgb(202, 204, 80);
+        }
+
+        .game-container {
+            height: 100vh;
+            background-color: antiquewhite;
+            margin: auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .tpanel {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 100px;
+            background-color: black;
+        }
+
+        .num,
+        h2 {
+            margin: 1rem;
+            font-size: 1rem;
+            background-color: var(--main-color);
+            padding: 0.5rem 0.8rem;
+            border-radius: 1rem;
+            text-align: center;
+            width: 70%;
+        }
+
+        .mpanel {
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1vw;
+            justify-content: space-between;
+            height: calc(100% - 100px);
+        }
+        
+        .bubble {
+            overflow: hidden;
+            width: 50px;
+            height: 50px;
+            background-color: var(--main-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .bubble:hover {
+            background-color: rgb(135, 136, 53);
+        }
+
+
+        .game-over-msg {
+            font-size: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="game-container">
+            <div class="tpanel">
+                <div class="tap">
+                    <h2>Hit</h2>
+                    <div class="num hit"></div>
+                </div>
+
+                <div class="tap">
+                    <h2>Timer</h2>
+                    <div class="num timer">0</div>
+                </div>
+
+                <div class="tap">
+                    <h2>Score</h2>
+                    <div class="num score">0</div>
+                </div>
+            </div>
+
+            <div class="mpanel">
+
+            </div>
+            
+        </div>
+    </main>
+
+    <script>
+        let makeBubbles = () => {
+            let bubbles = document.querySelector(".mpanel");
+            let bubble = "";
+
+            for (let i = 1; i <= 225; i++) {
+                let randomNum = Math.floor(Math.random() * 51)
+                bubble += `<div class="bubble">${randomNum}</div>`
+            }
+            bubbles.innerHTML = bubble;
+        }
+        makeBubbles();
+
+        let timer = 60;
+        let timerValue = setInterval(() => {
+            if (timer > 0) {
+                timer--;
+                document.querySelector(".timer").textContent = timer;
+            }
+            else {
+                clearInterval(timerValue)
+                document.querySelector(".mpanel").innerHTML = `<div class="game-over-msg">
+                <div class="game-over">Game Over</div>
+                <div class="user-score">Your Score is ${score}</div>
+            </div>`;
+            document.querySelector(".mpanel").style.justifyContent = "center";
+            }
+        }, 1000);
+        timerValue;
+
+
+        let randomHitValue = 0;
+        let hitValue = () => {
+            randomHitValue = Math.floor(Math.random() * 25);
+            document.querySelector(".hit").textContent = randomHitValue;
+        }
+        hitValue();
+
+
+        let score = 0;
+        let increaseScore = () => {
+            score += 10;
+            let scoreValue = document.querySelector(".score").textContent = score;
+        }
+
+        document.querySelector(".mpanel").addEventListener("click", (details) => {
+            let clickedNum = (Number(details.target.textContent));
+            if (clickedNum === randomHitValue) {
+                increaseScore();
+                makeBubbles();
+                hitValue();
+                timer += 5;
+            }
+        })
+
+
+    </script>
+</body>
+
+</html>
